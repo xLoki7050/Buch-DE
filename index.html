@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Buchvorstellung: Die Ruinen von Gorlan</title>
+    <title>Animations-Präsentation: Die Ruinen von Gorlan</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap');
 
-        /* CSS RESET & DYNAMISCHE VARIABLEN */
         :root {
-            --bg-color: #090d0b;
-            --card-bg: rgba(13, 22, 17, 0.9);
-            --primary-gold: #d4af37;
+            --bg-color: #070a09;
+            --card-bg: rgba(10, 18, 14, 0.95);
+            --primary-gold: #c5a059;
             --text-light: #e2e8f0;
-            --text-muted: #94a3b8;
-            --transition-speed: 0.4s;
+            --text-muted: #64748b;
+            --anim-speed: 0.6s;
         }
 
         * {
@@ -34,99 +33,128 @@
             align-items: center;
         }
 
-        /* HINTERGRUND-EFFEKT (Subtiles Waldleuchten) */
         .presentation-container {
             width: 100vw;
             height: 100vh;
             position: relative;
-            background: radial-gradient(circle at 50% 40%, #13251a 0%, #080d0a 100%);
+            background: radial-gradient(circle at 50% 50%, #112218 0%, #060a08 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        /* VISUELLER FORTSCHRITTSBALKEN */
+        /* TOP PROGRESS BAR */
         .progress-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            background: rgba(255, 255, 255, 0.03);
             z-index: 10;
         }
         .progress-bar {
             height: 100%;
-            width: 20%;
-            background: linear-gradient(90deg, #b38f2d, var(--primary-gold));
-            transition: width var(--transition-speed) ease;
+            width: 0%;
+            background: linear-gradient(90deg, #9a7b3c, var(--primary-gold));
+            transition: width 0.4s ease;
         }
 
-        /* FOLIEN-ARCHITEKTUR MIT FADE-EFFEKT */
+        /* FOLIEN BASIS STYLING */
         .slide {
             position: absolute;
             width: 85%;
             max-width: 950px;
-            height: 70%;
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.98);
-            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease, visibility var(--transition-speed);
-            display: flex;
+            height: 75%;
+            display: none; /* Wird über JS auf 'flex' gesetzt */
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            padding: 50px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 45px;
+            border: 1px solid rgba(197, 160, 89, 0.15);
             background: var(--card-bg);
-            border-radius: 6px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.7);
-            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
         }
 
-        /* Aktive Folie überschreibt Unsichtbarkeit flüssig */
         .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
+            display: flex;
         }
 
-        /* TYPOGRAFIE & TITEL */
+        /* KEYFRAME ANIMATIONEN */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ANIMATIONS-TRIGGER FÜR ELEMENTE INNERHALB DER AKTIVEN FOLIE */
+        .slide.active h1 {
+            animation: fadeInUp var(--anim-speed) ease forwards;
+        }
+
+        .slide.active h2 {
+            animation: fadeInUp var(--anim-speed) ease forwards;
+        }
+
+        .slide.active p {
+            opacity: 0;
+            animation: fadeIn var(--anim-speed) ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        /* Zeitversetztes Einfliegen der Listenpunkte (Stagger Effect) */
+        .slide.active li:nth-child(1) { animation: fadeInUp var(--anim-speed) ease forwards; animation-delay: 0.2s; opacity: 0; }
+        .slide.active li:nth-child(2) { animation: fadeInUp var(--anim-speed) ease forwards; animation-delay: 0.4s; opacity: 0; }
+        .slide.active li:nth-child(3) { animation: fadeInUp var(--anim-speed) ease forwards; animation-delay: 0.6s; opacity: 0; }
+        .slide.active li:nth-child(4) { animation: fadeInUp var(--anim-speed) ease forwards; animation-delay: 0.8s; opacity: 0; }
+
+        .slide.active .quote-container {
+            animation: fadeInUp var(--anim-speed) ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .slide.active .speaker-notes {
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+
+        /* TEXT UND INHALT ELEMENTS */
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: 3rem;
+            font-size: 3.2rem;
             color: var(--primary-gold);
             letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
         h2 {
             font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             color: var(--primary-gold);
             letter-spacing: 2px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 500;
-            position: relative;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
             padding-bottom: 15px;
             width: 100%;
         }
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 2px;
-            background: var(--primary-gold);
-            opacity: 0.4;
-        }
-
-        /* INHALTE */
+        
         .content-box {
             flex-grow: 1;
             display: flex;
@@ -135,26 +163,20 @@
             align-items: center;
             width: 100%;
         }
-        p {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: #cbd5e1;
-            font-weight: 300;
-        }
+
         ul {
             text-align: left;
             list-style-type: none;
             width: 100%;
-            max-width: 700px;
+            max-width: 720px;
         }
         li {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1.25rem;
+            margin-bottom: 18px;
             line-height: 1.6;
             position: relative;
-            padding-left: 30px;
-            font-weight: 400;
-            color: #e2e8f0;
+            padding-left: 35px;
+            color: #cbd5e1;
         }
         li strong {
             color: var(--primary-gold);
@@ -164,91 +186,82 @@
             content: "◆";
             position: absolute;
             left: 5px;
-            top: 2px;
-            font-size: 0.9rem;
             color: var(--primary-gold);
-            opacity: 0.8;
+            font-size: 1rem;
         }
 
-        /* EDLES ZITAT-STYLING */
         .quote-container {
             font-family: 'Cinzel', serif;
-            font-size: 1.65rem;
+            font-size: 1.7rem;
             color: #ffffff;
             line-height: 1.8;
             max-width: 800px;
-            padding: 40px;
-            position: relative;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.02);
-            border-left: 3px solid var(--primary-gold);
+            padding: 35px;
+            background: rgba(255,255,255,0.01);
+            border-left: 4px solid var(--primary-gold);
+            box-shadow: inset 10px 0 20px rgba(0,0,0,0.3);
         }
 
-        /* DISKRETE SPRECHNOTIZEN UNTEN */
         .speaker-notes {
             width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border-left: 3px solid var(--primary-gold);
+            background: rgba(5, 8, 6, 0.6);
+            border-top: 1px solid rgba(197, 160, 89, 0.3);
             padding: 15px 20px;
             border-radius: 4px;
             font-size: 0.95rem;
-            color: var(--text-muted);
+            color: #94a3b8;
             text-align: left;
-            margin-top: 30px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .speaker-notes strong {
             color: var(--primary-gold);
-            text-transform: uppercase;
-            font-size: 0.85rem;
             letter-spacing: 1px;
         }
 
-        /* REINES UI-OVERLAY FÜR NAVIGATION */
+        /* NAVIGATION INTERFACE */
         .nav-layer {
             position: absolute;
-            bottom: 40px;
+            bottom: 35px;
             width: 85%;
             max-width: 950px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 5;
         }
         .nav-btn {
             background: transparent;
             color: var(--primary-gold);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            padding: 12px 28px;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            padding: 12px 30px;
             font-size: 0.85rem;
             font-family: 'Cinzel', serif;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
         }
         .nav-btn:hover {
             background: var(--primary-gold);
             color: var(--bg-color);
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 25px rgba(197, 160, 89, 0.35);
         }
         .nav-btn:disabled {
-            opacity: 0.2;
+            opacity: 0.15;
             cursor: not-allowed;
-            border-color: rgba(255,255,255,0.1);
-            color: var(--text-muted);
+            color: #475569;
+            border-color: rgba(255,255,255,0.05);
         }
         .nav-btn:disabled:hover {
             background: transparent;
-            color: var(--text-muted);
+            color: #475569;
             box-shadow: none;
         }
         .progress-indicator {
             font-size: 0.9rem;
             color: var(--text-muted);
             letter-spacing: 1px;
-            font-weight: 300;
         }
     </style>
 </head>
@@ -263,11 +276,11 @@
         <div class="slide active">
             <div class="content-box">
                 <h1>Die Chroniken von Araluen</h1>
-                <p style="color: var(--text-muted); font-size: 1.5rem; letter-spacing: 2px; font-family: 'Cinzel', serif; margin-top: 5px;">Die Ruinen von Gorlan</p>
-                <p style="margin-top: 30px; font-style: italic; opacity: 0.7;">Buchvorstellung • Fokus auf Inhalt & Struktur</p>
+                <p style="color: var(--primary-gold); font-size: 1.5rem; letter-spacing: 3px; font-family: 'Cinzel', serif; margin-top: 10px;">Die Ruinen von Gorlan</p>
+                <p style="margin-top: 40px; font-style: italic; color: #94a3b8;">Eine 3-Minuten-Buchvorstellung</p>
             </div>
             <div class="speaker-notes">
-                <strong>Sprechnotiz (0:00 - 0:30):</strong> "Guten Tag. Ich präsentiere heute das Buch 'Die Ruinen von Gorlan' von John Flanagan. Es ist der fesselnde Auftakt der 'Chroniken von Araluen'-Reihe, die weltweit Millionen Leser begeistert."
+                <strong>Sprechnotiz (0:00 - 0:30):</strong> "Guten Tag zusammen. Ich präsentiere heute das Buch 'Die Ruinen von Gorlan' von John Flanagan. Es ist das erste Buch einer epischen Fantasy-Reihe, die komplett ohne klassische Zauberei auskommt."
             </div>
         </div>
 
@@ -275,14 +288,14 @@
             <h2>Worum geht es?</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>Ein ungleicher Held:</strong> Der 15-jährige Waisenjunge Will ist klein, flink und scheinbar talentfrei für das klassische Handwerk.</li>
-                    <li><strong>Geplatzte Träume:</strong> Sein sehnlichster Wunsch, ein mächtiger Ritter zu werden, scheitert an seiner Statur.</li>
-                    <li><strong>Die Berufung:</strong> Er wird vom unnahbaren Waldläufer Halt rekrutiert und lernt die Kunst der Unsichtbarkeit.</li>
-                    <li><strong>Die Krise:</strong> Als das Reich Araluen von den Monstern des verbannten Lord Morgarath bedroht wird, wird Wills Ausbildung zur bitteren Realität.</li>
+                    <li><strong>Der Außenseiter:</strong> Der 15-jährige Waisenjunge Will ist klein, schwach und hat scheinbar kein Talent.</li>
+                    <li><strong>Kriegsschule lehnt ab:</strong> Sein Traum, ein tapferer Ritter zu werden, scheitert an seiner körperlichen Statur.</li>
+                    <li><strong>Das Geheimnis:</strong> Der finstere Waldläufer Halt nimmt ihn als Lehrling auf und zeigt ihm die Kunst der Tarnung.</li>
+                    <li><strong>Die Mission:</strong> Will lernt Spionage und Bogenschießen, um Araluen vor den Monstern des verbannten Lord Morgarath zu schützen.</li>
                 </ul>
             </div>
             <div class="speaker-notes">
-                <strong>Sprechnotiz (0:30 - 1:30):</strong> "Im Kern geht es um Will, der mangels Masse nicht zum Ritter taugt. Doch statt im Abseits zu landen, holt ihn der Meisterspion Halt in die Garde der Waldläufer. Hier lernt er Spionage und Bogenschießen. Als der dunkle Lord Morgarath angreift, wird Wills Können direkt auf die ultimative Probe gestellt."
+                <strong>Sprechnotiz (0:30 - 1:30):</strong> "Worum geht es? Der schmächtige Will wird nicht zum Ritter ausgebildet. Doch er kriegt eine Chance beim Waldläufer-Geheimdienst. Halt bringt ihm Spionage und Bogenschießen bei. Als das Reich bedroht wird, muss Will beweisen, dass Köpfchen mehr wert ist als pure Muskelmasse."
             </div>
         </div>
 
@@ -290,13 +303,13 @@
             <h2>Warum dieses Buch?</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>Fokus auf Realismus:</strong> Keine billigen Zaubersprüche. Erfolg resultiert rein aus Taktik, extremem Training und logischem Verstand.</li>
-                    <li><strong>Dynamische Charaktere:</strong> Die Entwicklung vom unsicheren Jungen zum strategisch denkenden Waldläufer ist packend inszeniert.</li>
-                    <li><strong>Humor & Tiefgang:</strong> Die Dynamik zwischen dem wortkargen Mentor und dem neugierigen Lehrling trägt die gesamte Story.</li>
+                    <li><strong>Echte Fähigkeiten statt Magie:</strong> Die Helden gewinnen durch Strategie, Logik, Disziplin und hartes Training – nicht durch Zaubersprüche.</li>
+                    <li><strong>Mentoren-Dynamik:</strong> Die Freundschaft zwischen dem grimmigen Halt und dem neugierigen Will ist voller Humor und Tiefgang.</li>
+                    <li><strong>Spannungsbogen:</strong> Die packende Atmosphäre zieht den Leser sofort in den Bann.</li>
                 </ul>
             </div>
             <div class="speaker-notes">
-                <strong>Sprechnotiz (1:30 - 2:15):</strong> "Ich habe das Buch gewählt, weil es sich erfrischend von anderer Fantasy abhebt. Es gibt keine unlogische Magie – wer überlebt, tut das, weil er klüger, schneller und disziplinierter ist. Das macht die Welt greifbar und die Charaktere extrem authentisch."
+                <strong>Sprechnotiz (1:30 - 2:15):</strong> "Warum habe ich das Buch gewählt? Es bricht mit Klischees. Es fasziniert, weil die Charaktere alles durch harte Arbeit lernen müssen. Keine Zauberstäbe helfen hier. Die Bindung zwischen dem Lehrer Halt und seinem Lehrling Will ist zudem extrem unterhaltsam geschrieben."
             </div>
         </div>
 
@@ -308,22 +321,22 @@
                 </div>
             </div>
             <div class="speaker-notes">
-                <strong>Sprechnotiz (2:15 - 2:45):</strong> "Ein prägnantes Zitat aus dem Werk lautet: [ZITAT LAUT & DEUTLICH VORLESEN]. Es beschreibt perfekt die Philosophie der Waldläufer: Perfektion durch Wiederholung. Das ist nicht nur im Buch spannend, sondern auch ein starker Gedanke für den Alltag."
+                <strong>Sprechnotiz (2:15 - 2:45):</strong> "Ein wichtiger Satz aus dem Buch lautet: [ZITAT DEUTLICH VORLESEN]. Das zeigt perfekt den Kern des Buchs. Perfektion verlangt Disziplin. Ein inspirierender Spruch, der nicht nur für die Waldläufer im Buch gilt."
             </div>
         </div>
 
         <div class="slide">
             <h2>Fazit</h2>
             <div class="content-box">
-                <p style="max-width: 700px; font-size: 1.5rem; color: var(--primary-gold); font-family: 'Cinzel', serif; margin-bottom: 20px;">
-                    Ein zeitloses Meisterwerk über Mut, Disziplin und die Stärke der Unterschätzten.
+                <p style="max-width: 700px; font-size: 1.6rem; color: var(--primary-gold); font-family: 'Cinzel', serif; margin-bottom: 25px;">
+                    Ein packendes Abenteuer über Mut, Kameradschaft und die Stärke derer, die oft unterschätzt werden.
                 </p>
-                <p style="font-size: 1.1rem; color: var(--text-muted); font-weight: 300;">
-                    Vielen Dank für Ihre Aufmerksamkeit. Ich stehe nun für Fragen zur Verfügung.
+                <p style="font-size: 1.1rem; color: #94a3b8; font-weight: 300;">
+                    Vielen Dank für eure Aufmerksamkeit. Gibt es noch Fragen?
                 </p>
             </div>
             <div class="speaker-notes">
-                <strong>Sprechnotiz (2:45 - 3:00):</strong> "Zusammenfassend ist Band 1 ein Muss für jeden, der strategische Abenteuer mag. Danke fürs Zuhören. Gibt es noch Fragen?"
+                <strong>Sprechnotiz (2:45 - 3:00):</strong> "Zusammenfassend ist 'Die Ruinen von Gorlan' ein genialer Start für eine Reihe. Ich kann es jedem empfehlen. Vielen Dank fürs Zuhören, ich beantworte nun gerne eure Fragen."
             </div>
         </div>
 
@@ -343,37 +356,36 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        function renderPresentation() {
-            // Schleife setzt Klassen für saubere CSS-Übergänge
+        function updateSlide() {
+            // Blendet alle Folien aus und stoppt deren CSS-Animationen
             slides.forEach((slide, idx) => {
-                if (idx === currentIdx) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
-                }
+                slide.classList.remove('active');
             });
 
-            // UI-Elemente berechnen und aktualisieren
-            const totalSlides = slides.length;
-            const progressPercent = ((currentIdx + 1) / totalSlides) * 100;
-            
-            progressBar.style.width = `${progressPercent}%`;
-            progressText.textContent = `Folie ${currentIdx + 1} von ${totalSlides}`;
+            // Aktiviert aktuelle Folie -> CSS-Animationen starten neu von vorn
+            slides[currentIdx].classList.add('active');
 
-            // Buttons bei Endpunkten deaktivieren
+            // Berechnungen für UI
+            const total = slides.length;
+            const percentage = ((currentIdx + 1) / total) * 100;
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `Folie ${currentIdx + 1} von ${total}`;
+
+            // Buttons blockieren an den Enden
             prevBtn.disabled = currentIdx === 0;
-            nextBtn.disabled = currentIdx === totalSlides - 1;
+            nextBtn.disabled = currentIdx === total - 1;
         }
 
-        function changeSlide(direction) {
-            const nextIdx = currentIdx + direction;
-            if (nextIdx >= 0 && nextIdx < slides.length) {
-                currentIdx = nextIdx;
-                renderPresentation();
+        function changeSlide(dir) {
+            const target = currentIdx + dir;
+            if (target >= 0 && target < slides.length) {
+                currentIdx = target;
+                updateSlide();
             }
         }
 
-        // Tastatur-Events abfangen (Pfeiltasten, Enter, Leertaste)
+        // Steuerung über Tastatur (Pfeiltasten / Leertaste)
         document.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowRight' || e.key === ' ') {
                 e.preventDefault();
@@ -383,8 +395,8 @@
             }
         });
 
-        // Initiales Rendern beim Start
-        renderPresentation();
+        // Start
+        updateSlide();
     </script>
 </body>
 </html>
